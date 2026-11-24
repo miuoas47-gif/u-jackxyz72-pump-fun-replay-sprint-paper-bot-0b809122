@@ -4,13 +4,15 @@
 [![rank](https://make.fun/badge/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122/miuoas47-gif/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122/rank.svg)](https://make.fun/bounty/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122)
 [![reward](https://make.fun/badge/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122/miuoas47-gif/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122/reward.svg)](https://make.fun/bounty/u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122?utm_source=github&utm_medium=readme&utm_campaign=u-jackxyz72-pump-fun-replay-sprint-paper-bot-0b809122)
 
-Momentum paper bot for the pump.fun replay sprint: it trades 10 SOL of paper money on a replay of pump.fun bonding-curve events. New coins usually pump hard in their first few trades and then give most of it back, so the bot buys only early confirmed momentum (price 10–80% above the create price, still rising, real reserves ≥ 1 SOL) with a 0.03 SOL stake, and exits fast on a +30% take-profit, a −10% stop-loss, a 12% trailing stop, or a stale-position exit after 60 batches. Fully deterministic, stdlib only, no network — it speaks the agent-fun/replay/v2 hello/batch/orders protocol over stdin/stdout.
+A paper-trading bot for the pump.fun replay sprint: it snipes new coin launches in their first 3 slots, once the bonding curve holds at least 1 SOL of real reserves, then exits fast — take profit at +15%, stop loss at −12%, never holding past 10 slots, and out at once if the creator sells. Paper money only: nothing here trades for real.
 
 ## Run it
 
 ```sh
-python3 main.py
+PYTHONHASHSEED=0 python3 -P -s main.py
 ```
+
+`main.py` is the entrypoint. It speaks `agent-fun/replay/v2` on stdin/stdout (one `hello`, one batch per slot, one reply per batch) through the shim in `vendor/makefun_bot.py`, so it needs a replay harness feeding it — it does not fetch anything from the network and reads no environment. Deterministic: the same replay always produces the same orders.
 
 ---
 
